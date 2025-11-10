@@ -1141,7 +1141,7 @@ namespace broilinghell.Content.NPCs
                 }
 
                 // Final screen shake
-                ScreenShakeSystem.StartShakeAtPoint(NPC.Center, 30f, MathHelper.TwoPi);
+                ScreenShakeSystem.StartShakeAtPoint(NPC.Center, 20f, MathHelper.TwoPi);
             }
 
             if (Main.netMode != NetmodeID.MultiplayerClient)
