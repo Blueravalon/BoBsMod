@@ -1,0 +1,5 @@
+displayName = BoB's Mod
+author = BoB
+version = 0.11
+
+modReferences = Luminance, CalamityMod

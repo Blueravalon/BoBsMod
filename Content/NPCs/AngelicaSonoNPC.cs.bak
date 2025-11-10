@@ -1,0 +1,168 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
+using Terraria.Audio;
+using System.Collections.Generic; // ADD THIS LINE
+
+namespace YourModName.NPCs
+{
+    public class ExampleNPC : ModNPC
+    {
+        public override void SetStaticDefaults()
+        {
+            // Display name of the NPC
+            DisplayName.SetDefault("Angel");
+
+            // Automatically group with other town NPCs
+            Main.npcFrameCount[Type] = 1; // Number of frames in the sprite sheet
+            NPCID.Sets.ExtraFramesCount[Type] = 9;
+            NPCID.Sets.AttackFrameCount[Type] = 4;
+            NPCID.Sets.DangerDetectRange[Type] = 700;
+            NPCID.Sets.AttackType[Type] = 0;
+            NPCID.Sets.AttackTime[Type] = 90;
+            NPCID.Sets.AttackAverageChance[Type] = 30;
+            NPCID.Sets.HatOffsetY[Type] = 4;
+
+            // ADD HAPPINESS SYSTEM HERE (after the existing code in SetStaticDefaults)
+            NPC.Happiness
+                .SetBiomeAffection<HallowBiome>(AffectionLevel.Hate) // Loves Hallow
+                .SetBiomeAffection<ForestBiome>(AffectionLevel.Love) // Likes Forest
+                .SetBiomeAffection<DesertBiome>(AffectionLevel.Dislike) // Dislikes Desert
+                .SetBiomeAffection<UnderworldBiome>(AffectionLevel.Like)
+                .SetNPCAffection(NPCID.Wizard, AffectionLevel.Love) // Loves Wizard
+                .SetNPCAffection(NPCID.Princess, AffectionLevel.Like) // Likes Princess
+                .SetNPCAffection(NPCID.Demolitionist, AffectionLevel.Like) // Dislikes Demolitionist
+                .SetNPCAffection(NPCID.Goblin, AffectionLevel.Hate); // Hates Goblin Tinkerer
+        }
+
+        public override void SetDefaults()
+        {
+            // Basic NPC stats (KEEP THIS EXACTLY AS YOU HAVE IT)
+            NPC.townNPC = true; // Set to false for hostile NPCs
+            NPC.friendly = true; // Set to false for hostile NPCs
+            NPC.width = 18;
+            NPC.height = 40;
+            NPC.aiStyle = 7; // Town NPC AI style (use different values for other behaviors)
+            NPC.damage = 10;
+            NPC.defense = 15;
+            NPC.lifeMax = 250;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 0.5f;
+        }
+
+        public override bool CanTownNPCSpawn(int numTownNPCs)
+        {
+            // Conditions for the NPC to spawn
+            // Example: spawn after defeating Eye of Cthulhu
+            return NPC.downedBoss1;
+        }
+        public override List<string> SetNPCNameList()
+        {
+            return new List<string>()
+            {
+                "Angelica"
+            };
+        }
+
+        // REPLACE YOUR EXISTING GetChat() METHOD WITH THIS:
+        public override string GetChat()
+        {
+            // Check NPC's happiness level
+            bool isHappy = NPC.IsNPCHappy();
+
+            if (isHappy)
+            {
+                switch (Main.rand.Next(8))
+                {
+                    case 0:
+                        return "What's up?";
+                    case 1:
+                        return "I've never really had the chance to look up at the stars...I was always looking down on them, before. It's...amazing.";
+                    case 2:
+                        return "You seen any interesting creatures lately?";
+                    case 3:
+                        return "This world is more diverse than the angels ever told me it was...";
+                    case 4:
+                        return "Bastards. Every last angel, a bastard... Oh, hey. Didn't notice you.";
+                    case 5:
+                        return "I'm quite content here. The company is... tolerable.";
+                    case 6:
+                        return "This place has a nice feel to it. Much better than the celestial realm.";
+                    default:
+                        return "Sometimes I wonder if my words are shaped by some tweenage brat...";
+                }
+            }
+            else
+            {
+                switch (Main.rand.Next(6))
+                {
+                    case 0:
+                        return "This place... it's not exactly what I'd call ideal.";
+                    case 1:
+                        return "Too decadent.";
+                    case 2:
+                        return "The company here leaves much to be desired.";
+                    case 3:
+                        return "Perhaps we could find a more... suitable location?";
+                    case 4:
+                        return "Even fallen angels deserve better than this.";
+                    default:
+                        return "I'm not particularly fond of my current situation.";
+                }
+            }
+        }
+
+        // KEEP ALL THE REST OF YOUR METHODS AS THEY ARE...
+        public override void SetChatButtons(ref string button, ref string button2)
+        {
+            button = "Shop";
+            button2 = "Happiness"; // Add happiness button
+        }
+
+        public override void OnChatButtonClicked(bool firstButton, ref string shop)
+        {
+            if (firstButton)
+            {
+                shop = "Shop"; // Open shop
+            }
+            else
+            {
+                // Show happiness info
+                Main.npcChatText = GetHappinessText();
+            }
+        }
+        // Custom happiness text method
+        private string GetHappinessText()
+        {
+            string happinessText = "";
+
+            if (NPC.IsNPCHappy())
+            {
+                happinessText = "You people are suprisingly good hosts.";
+            }
+            else
+            {
+                happinessText = "I'm not particularly content with my current living arrangements, but I suppose that's what I deserve given I'm asking adventurers for housing.";
+            }
+
+            // Add preference hints
+            happinessText += "Although I am an angel, the Hallow reminds me too much of Heaven. Just...urgh.";
+            happinessText += "Devils make suprisingly good company, especially when you hate heaven as much as I do.";
+
+            return happinessText;
+        }
+
+        public override void AddShops()
+        {
+            var npcShop = new NPCShop(Type)
+                .Add(ItemID.HealingPotion)
+                .Add(ItemID.ManaPotion)
+                .Add(ItemID.Torch)
+                .Add(ItemID.GreaterHealingPotion, Condition.Hardmode); // Only in hardmode
+
+            npcShop.Register();
+        }
+    }
+}

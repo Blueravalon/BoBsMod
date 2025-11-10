@@ -1,0 +1,115 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.ModLoader.Utilities;
+using Terraria.DataStructures;
+using broilinghell.Systems;
+
+namespace broilinghell.Content.NPCs
+{
+    public class AngelicaSono : ModNPC
+    {
+        private bool tintActivated = false;
+
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Angelica Sono");
+            Main.npcFrameCount[Type] = 4;
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            { // Influences how the NPC looks in the Bestiary
+                Velocity = 1f // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
+        }
+
+        public override void SetDefaults()
+        {
+            NPC.width = 18;
+            NPC.height = 40;
+            NPC.damage = 60;
+            NPC.defense = 6;
+            NPC.lifeMax = 5000;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath2;
+            NPC.value = 60f;
+            NPC.knockBackResist = 0.5f;
+            NPC.aiStyle = 3;
+        }
+
+        public override void FindFrame(int frameHeight)
+        {
+            // Simple frame animation - cycles through frames over time
+            NPC.frameCounter += 1.0;
+
+            // Change frame every 10 ticks (adjust speed as needed)
+            if (NPC.frameCounter >= 10.0)
+            {
+                NPC.frameCounter = 0.0;
+                NPC.frame.Y += frameHeight;
+
+                // Reset to first frame after reaching the last frame
+                if (NPC.frame.Y >= frameHeight * Main.npcFrameCount[Type])
+                {
+                    NPC.frame.Y = 0;
+                }
+            }
+        }
+
+        public override void AI()
+        {
+            // Activate pink tint when NPC is alive and active
+            if (!tintActivated && NPC.active)
+            {
+                PinkTintSystem.ActivatePinkTint(0.8f); // Adjust intensity as needed
+                tintActivated = true;
+            }
+        }
+
+        public override void OnKill()
+        {
+            // Deactivate pink tint when NPC is killed
+            if (tintActivated)
+            {
+                PinkTintSystem.DeactivatePinkTint();
+                tintActivated = false;
+            }
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            // Activate pink tint when NPC spawns
+            PinkTintSystem.ActivatePinkTint(0.8f); // Adjust intensity as needed
+            tintActivated = true;
+        }
+
+        public override bool CheckActive()
+        {
+            // This is called when the NPC is about to despawn naturally
+            // Return false to prevent natural despawning if you want, or true to allow it
+            // We'll deactivate the tint here in case of despawning
+            if (tintActivated)
+            {
+                PinkTintSystem.DeactivatePinkTint();
+                tintActivated = false;
+            }
+            return true; // Allow natural despawning
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                // Sets the spawning conditions of this NPC that is listed in the bestiary.
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+                // Sets the description of this NPC that is listed in the bestiary.
+                new FlavorTextBestiaryInfoElement("An angel, banished from Heaven's eternal rave party for being 'too much of a prude'. She now lay in the earthly planes, defending all that is holy and destroying all that is dark."),
+            });
+        }
+    }
+}

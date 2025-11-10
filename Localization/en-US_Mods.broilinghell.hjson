@@ -1,0 +1,148 @@
+# This file will automatically update with entries for new content after a build and reload.
+
+Items: {
+	testsworditem: {
+		DisplayName: test.item.sword
+		Tooltip:
+			'''
+			Running your hand along the blade,
+			you feel a strange emptiness.
+			You're a dirty, dirty cheater.
+			'''
+	}
+
+	bobsword: {
+		DisplayName: BoB's Bleak Blade
+		Tooltip: ""
+	}
+
+	BoBlingSummonItem: {
+		DisplayName: BoBling Summon Item
+		Tooltip: spawns a fella when used!
+	}
+
+	DivinePotion: {
+		DisplayName: Divine Potion
+		Tooltip: ""
+	}
+
+	BoBTreasureBag: {
+		DisplayName: BoB Treasure Bag
+		Tooltip: ""
+	}
+
+	AngelicaTreasureBag: {
+		DisplayName: Angelica Treasure Bag
+		Tooltip: ""
+	}
+
+	AngelicaSonoItem: {
+		DisplayName: Angelica Sono Item
+		Tooltip: ""
+	}
+
+	AngelicFragment: {
+		DisplayName: Angelic Fragment
+		Tooltip: ""
+	}
+
+	VehementBlade: {
+		DisplayName: Vehement Blade
+		Tooltip: ""
+	}
+
+	FurGuard: {
+		DisplayName: Fur Guard
+		Tooltip: ""
+	}
+
+	CutsceneTest: {
+		DisplayName: Cutscene Test
+		Tooltip: ""
+	}
+
+	HallowedRune: {
+		DisplayName: Hallowed Rune
+		Tooltip: ""
+	}
+
+	InfernalChains: {
+		Tooltip: ""
+		DisplayName: BoB's Chains
+	}
+}
+
+Buffs: {
+	HealthBuff: {
+		DisplayName: Divine Blessing
+		Description: You have been blessed by the gods with uncomparable strength!
+	}
+
+	BoBBurn: {
+		DisplayName: BoB Burn
+		Description: Mods.broilinghell.Buffs.BoBBurn.Description
+	}
+}
+
+NPCs: {
+	Bobling.DisplayName: BoBling
+	BoB.DisplayName: BoB
+	AngelicaSono.DisplayName: Angelica Sono
+	HolyButterfly.DisplayName: Holy Butterfly
+
+	AngelicaSonoNPC: {
+		DisplayName: Angelica Sono
+
+		TownNPCMood: {
+			LikeNPC_Princess: "{NPCName} is one of the kinder people in this place."
+			HateNPC: I hate {NPCName}. He's nothing but a greedy bastard.
+			LikeNPC: I like {NPCName}. He's fairly bombastic. Bomb...bastic... Get it?
+			LoveNPC: "{NPCName} makes good conversation over a book."
+			HateBiome: The {BiomeName}... This place is a despicable atrocity sent from heaven.
+			DislikeBiome: "{BiomeName} is too dry..."
+			LikeBiome: I like being near hell. It's calming, being near somewhere I lived so long.
+			LoveBiome: It's so green...
+			HateCrowded: The more the merrier and all, but this is utterly stuffed.
+			DislikeCrowded: The more the merrier and all, but this is a bit much.
+			LoveSpace: It's so quiet... I enjoy it.
+			FarFromHome: Where the hell is my house..?
+			NoHome: Nature is amazing and all, but I'd really like shelter.
+			Content: I'm fine.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
+	handright.DisplayName: BoB's Right Hand
+	handleft.DisplayName: BoB's Left Hand
+	bobultima.DisplayName: BoB
+	baddog.DisplayName: bad dog
+	GodBoB.DisplayName: BoB
+	HallowedWarrior.DisplayName: Hallowed Warrior
+
+	ChaosWing.DisplayName: Angelica Sono, Angel of Judgement
+	Bobbette.DisplayName: Bobbette
+	babybob.DisplayName: babybob
+	Angel1.DisplayName: Angel1
+}
+
+Projectiles: {
+	MinionBossEye.DisplayName: no clue
+	BoblingProjectile.DisplayName: how do you see this
+	FallingSpiteProjectile.DisplayName: Falling Spite
+	Laser.DisplayName: Laser
+	DeathrayLaser.DisplayName: Deathray
+	DeathrayUnmoving.DisplayName: Deathray
+	OrbitalSatellite.DisplayName: Orbital Satellite
+	AngelicSlash.DisplayName: Angelic Slash
+	InfernalFlameburst.DisplayName: Infernal Flameburst
+	InfernalChainsSwing.DisplayName: Infernal Chains Swing
+	InfernalOverheatExplosion.DisplayName: Infernal Overheat Explosion
+	BoBChain.DisplayName: Bo B Chain
+}
+
+Achievements: {
+	AngelicaAdvancement: {
+		Description: Defeat Angelica Sono, protector of all things truly holy.
+		FriendlyName: Heaven's Arrow(ace)
+	}
+}

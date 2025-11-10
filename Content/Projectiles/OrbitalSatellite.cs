@@ -1,0 +1,81 @@
+﻿using System;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace broilinghell.Content.Projectiles
+{
+    public class OrbitalSatellite : ModProjectile
+    {
+        private float orbitAngle; // Current angle in radians
+        private NPC ownerNPC; // Reference to BoB
+        private int fireTimer;
+
+        public override void SetStaticDefaults()
+        {
+            // DisplayName.SetDefault("Orbital Satellite");
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 20;
+            Projectile.height = 20;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.ignoreWater = true;
+        }
+
+        public override void AI()
+        {
+            // First tick: store reference to BoB
+            if (ownerNPC == null || !ownerNPC.active || ownerNPC.type != ModContent.NPCType<NPCs.bobultima>())
+            {
+                int ownerIndex = (int)Projectile.ai[0];
+                if (ownerIndex >= 0 && ownerIndex < Main.maxNPCs && Main.npc[ownerIndex].active)
+                    ownerNPC = Main.npc[ownerIndex];
+                else
+                {
+                    Projectile.Kill();
+                    return;
+                }
+            }
+
+            // Update orbit angle
+            orbitAngle += 0.03f; // Orbit speed
+            float orbitRadius = 200f;
+
+            // Position relative to BoB
+            Projectile.Center = ownerNPC.Center + new Vector2(
+                (float)Math.Cos(orbitAngle) * orbitRadius,
+                (float)Math.Sin(orbitAngle) * orbitRadius
+            );
+
+            // Aim at player and shoot periodically
+            fireTimer++;
+            if (fireTimer >= 45) // Fire every 45 ticks (~0.75 sec)
+            {
+                fireTimer = 0;
+                Player target = Main.player[ownerNPC.target];
+                if (target.active && !target.dead && Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Vector2 direction = Vector2.Normalize(target.Center - Projectile.Center);
+                    Projectile.NewProjectile(
+                        Projectile.GetSource_FromAI(),
+                        Projectile.Center,
+                        direction * 12f,
+                        ModContent.ProjectileType<Laser>(), // Use your existing Laser projectile
+                        35,
+                        1f,
+                        Main.myPlayer
+                    );
+                }
+            }
+
+            // Optional: small rotation for visual flair
+            Projectile.rotation += 0.1f;
+        }
+    }
+}
